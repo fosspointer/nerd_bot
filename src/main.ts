@@ -2,7 +2,6 @@ import * as discord from 'discord.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import { isCommand, Command } from './command';
-import * as Event from './event'
 import * as storage from './storage'
 
 import * as _dotenv from 'dotenv';
