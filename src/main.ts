@@ -36,11 +36,12 @@ for(const file of command_files)  {
 }
 
 client.once('ready', async () => {
-    console.log(`Client logged in as '${client.user?.tag}'`);
+    console.log(`Client logged in as \`${client.user?.tag}\`.`);
     const guilds = await client.guilds.fetch();
     guilds.forEach(async guild => {
         storage.addCollectors(guild.id, client);
     });
+    console.log(`Updated all role-selection collectors.`);
 });
 
 const handle_command_interaction = async (interaction: ChatInputCommandInteraction<CacheType>) => {
