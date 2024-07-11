@@ -40,9 +40,18 @@ export function writeGuild(guild_id: string, guild_data: GuildData): void {
 }
 
 export function addRoleMenu(guild_id: string, role_menu: RoleMenuData): void {
-    let guild_data: GuildData = readGuild(guild_id);
+    const guild_data: GuildData = readGuild(guild_id);
     
     guild_data.roleMenus.push(role_menu);
+    writeGuild(guild_id, guild_data);
+}
+
+export function removeRoleMenu(guild_id: string, message_id: string): void {
+    const guild_data: GuildData = readGuild(guild_id);
+    const element_index = guild_data.roleMenus.findIndex(roleMenu => roleMenu.messageId === message_id);
+    if(element_index === -1) return;
+
+    guild_data.roleMenus.splice(element_index, 1);
     writeGuild(guild_id, guild_data);
 }
 
@@ -51,11 +60,21 @@ export async function addCollectors(guild_id: string, client: discord.Client): P
     const guild: discord.Guild = await client.guilds.fetch(guild_id);
 
     for(const menu of data.roleMenus) {
-        const channel = await guild.channels.fetch(menu.channelId);
+        const channel = await guild.channels.fetch(menu.channelId).catch(() => {
+            removeRoleMenu(guild_id, menu.messageId);
+            return;
+        });
+
         if(!channel?.isTextBased()) return;
         
-        const message = await channel.messages.fetch(menu.messageId);
-        addCollector(message, menu.timestamp);
+        try{
+            const message = await channel.messages.fetch(menu.messageId);
+            addCollector(message, menu.timestamp);
+        }
+        catch(err) {
+            removeRoleMenu(guild_id, menu.messageId);
+            return;
+        }
     }
 }
 

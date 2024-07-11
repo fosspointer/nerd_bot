@@ -1,4 +1,4 @@
-import { ButtonComponent, ButtonInteraction, CacheType, ChannelSelectMenuInteraction, ChatInputCommandInteraction, Client, Collection, IntentsBitField, Interaction, InteractionReplyOptions, InteractionType, Message, RoleSelectMenuInteraction, StringSelectMenuComponent, StringSelectMenuInteraction, UserSelectMenuInteraction } from 'discord.js';
+import * as discord from 'discord.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import { isCommand, Command } from './command';
@@ -8,17 +8,18 @@ import * as storage from './storage'
 import * as _dotenv from 'dotenv';
 _dotenv.config();
 
-const client = new Client({
+const client = new discord.Client({
     intents: [
-        IntentsBitField.Flags.Guilds,
-        IntentsBitField.Flags.GuildMessages, 
-        IntentsBitField.Flags.MessageContent, 
-        IntentsBitField.Flags.GuildModeration,
-        IntentsBitField.Flags.GuildMembers,
+        discord.IntentsBitField.Flags.Guilds,
+        discord.IntentsBitField.Flags.GuildMessages, 
+        discord.IntentsBitField.Flags.MessageContent, 
+        discord.IntentsBitField.Flags.GuildModeration,
+        discord.IntentsBitField.Flags.GuildMembers,
+        discord.IntentsBitField.Flags.DirectMessages,
     ]
 });
 
-const commands = new Collection<string, Command>();
+const commands = new discord.Collection<string, Command>();
 
 const command_path = path.join(__dirname, 'commands');
 const command_files = fs.readdirSync(command_path).filter(file => file.endsWith('.ts') || file.endsWith('.js'));
@@ -44,7 +45,7 @@ client.once('ready', async () => {
     console.log(`Updated all role-selection collectors.`);
 });
 
-const handle_command_interaction = async (interaction: ChatInputCommandInteraction<CacheType>) => {
+const handle_command_interaction = async (interaction: discord.ChatInputCommandInteraction<discord.CacheType>) => {
     const command = commands.get(interaction.commandName);
 
 	if (!command) return console.log(interaction.commandName);
@@ -53,7 +54,7 @@ const handle_command_interaction = async (interaction: ChatInputCommandInteracti
 		await command.execute(interaction, client);
 	} catch (error) {
 		console.error(error);
-		const message: InteractionReplyOptions = { content: 'There was an error while executing this command!', ephemeral: true };
+		const message: discord.InteractionReplyOptions = { content: 'There was an error while executing this command!', ephemeral: true };
         if (interaction.replied || interaction.deferred)
 			await interaction.followUp(message);
 		else
@@ -61,25 +62,23 @@ const handle_command_interaction = async (interaction: ChatInputCommandInteracti
 	}
 }
 
-let role :string;
-
-const handle_string_select_interaction = async (interaction: StringSelectMenuInteraction<CacheType>) => {
+const handle_string_select_interaction = async (interaction: discord.StringSelectMenuInteraction<discord.CacheType>) => {
     interaction.deferUpdate();
 }
 
-const handle_role_select_interaction = async (interaction: RoleSelectMenuInteraction<CacheType>) => {
+const handle_role_select_interaction = async (interaction: discord.RoleSelectMenuInteraction<discord.CacheType>) => {
     interaction.deferUpdate();
 }
 
-const handle_user_select_interaction = async (interaction: UserSelectMenuInteraction<CacheType>) => {
+const handle_user_select_interaction = async (interaction: discord.UserSelectMenuInteraction<discord.CacheType>) => {
     interaction.deferUpdate();
 }
 
-const handle_channel_select_interaction = async (interaction: ChannelSelectMenuInteraction<CacheType>) => {
+const handle_channel_select_interaction = async (interaction: discord.ChannelSelectMenuInteraction<discord.CacheType>) => {
     interaction.deferUpdate();
 }
 
-const handle_button_interaction = async (interaction: ButtonInteraction<CacheType>) => {   
+const handle_button_interaction = async (interaction: discord.ButtonInteraction<discord.CacheType>) => {   
     interaction.deferUpdate();
 }
 
@@ -96,6 +95,15 @@ client.on('interactionCreate', async interaction => {
         return await handle_channel_select_interaction(interaction);
     else if(interaction.isUserSelectMenu())
         return await handle_user_select_interaction(interaction);
+});
+
+client.on('messageCreate', async message => {
+    if(message.inGuild() || message.author.bot) return;
+    await message.author.send("Hello there! Unfortuantely, I don't support direct messages yet...");
+});
+
+client.on('messageDelete', message => {
+    storage.removeRoleMenu(message.guildId!, message.id);
 });
 
 client.login(process.env.BOT_TOKEN);

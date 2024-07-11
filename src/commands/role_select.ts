@@ -4,7 +4,7 @@ import * as storage from '../storage'
 
 const error = async (interaction: Discord.ChatInputCommandInteraction<Discord.CacheType>, message?: string | undefined) => {
     message = message ?? 'You timed out. You only have 15 seconds to respond to the message, in order to prevent abuse of the server\'s resources.';
-    interaction.reply(`${message} Aborting.`);
+    interaction.replied? interaction.followUp(`${message} Aborting.`) :interaction.reply(`${message} Aborting.`);
 }
 
 const RoleSelect : Command = {
