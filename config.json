@@ -1,0 +1,40 @@
+{
+    "how_nerd": {
+        "messages": [
+            [
+                ["You don't do none of that nerdy stuff. In fact, you just finished watching Andrew Tate and shaved your head in order to 'escape the Matrix'. You're actually really pathetic though not gonna lie..."],
+                ["All of this 'technology' stuff isn't for you... Not understanding how computers work you say you 'preferred' it when it was a 'black guy doing all the work', making family gatherings 10x more awkward."],
+                ["You heard the word USB once and asked if it's a type of sexually transmitted disease!"],
+                ["Please, you probably think RAM is something you eat with a spoon ;)"]
+            ],
+            [
+                ["You practically ask for gluten-free latte machiatto with soy milk and post it on your instagram story ;)"],
+                ["You touched grass today, but then remembered that it's poisoned with 5G and Bill Gates is secretly watching you!"],
+                ["Your friend mentioned 'Linux' and 'Python' once, and you thought he was talking about exotic food!"]
+            ],
+            [
+                ["You recently installed Kali Linux inside of a VM, having watched Mr. Robot for the twentieth time. You think you are becomming a hacker this way, but to be honest, you're just a script kiddie."]
+            ],
+            [
+                ["You are an enterprise C# developer working at Microsoft with Visual Studio and Windows Forms. Your side hobby is coding an indie game written in Rust btw (which you'll also never finish) using VSCode."],
+                ["Your favorite movie series is 'The Matrix' and you love retro Nintendo games. You probably have at least one Raspberry Pi in your house."]
+            ],
+            [
+                ["You were showing your passion to your pet fish, which you also happened to name qwerty."],
+                ["As a man, you wear skirts to work as it 'increases airflow for better productivity'."],
+                ["You can't code without your 'programmer socks', which you absolutely NEED for debugging ;)"],
+                ["For the love of god, this is the 20th time you've said you 'use arch btw'. Yes, I know you use a vi macro to say that, inside of your 'bspwm + tmux + polybar + dmenu + st' config that you post on r/unixporn on Reddit."],
+                ["You've made it very clear that you regularly use 'programming socks' to (supposedly) 'increase blood circulation to your brain', wearing skirts to 'increase air flow' and drink monster energy drinks to 'increase development productivity'. You're a man, but not for long..."]
+            ],
+            [
+                ["You were thinking about converting your friends to Gentoo Linux, but then remembered you have none."],
+                ["In today's society, everything is too 'bloated' and 'complicated' for you. Everyone uses close-sourced software, and nobody appreciates freedom or efficiency. Your Gentoo machine is the sole exception, running a whole 2 CPU cycles faster than the rest of us..."],
+                ["You spend 90% of your day writing proposal papers for the C++ ISO for this feature you always wanted to have. Funnily enough, you've never actually written any code..."]
+            
+            ],
+            [
+                ["The fact that you haven't taken a shower in 20 decades makes me want to kill myself. I know you spent all of that time mastering tha art of worshiping Richard Stallman as your lord and savior, all of which happened in GNU/Emacs inside of your LFS-librebooted machine."]
+            ]
+        ]
+    }
+}

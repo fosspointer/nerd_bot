@@ -13,19 +13,23 @@
     "url": "https://github.com/fosspointer/nerd_bot"
   },
   "keywords": [
-    "discord-bot", "typescript", "discord", "discord.js"
+    "discord-bot",
+    "typescript",
+    "discord",
+    "discord.js"
   ],
   "author": "Νεφέλη Κωνσταντάτου",
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "discord.js": "^14.11.0",
+    "discord.js": "^14.17.3",
     "dotenv": "^16.3.1",
-    "nodemon": "^3.0.1",
+    "mathjax-full": "^3.2.2",
+    "sharp": "^0.33.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.1.6"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22",
+    "nodemon": "^3.1.9",
     "ts-node": "^10.9.1"
   }
 }

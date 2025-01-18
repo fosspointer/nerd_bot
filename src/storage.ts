@@ -4,15 +4,15 @@ import * as discord from 'discord.js';
 
 const data_directory: string = '../data';
 
-export type RoleMenuData = {
+export interface RoleMenuData {
     channelId: string;
     messageId: string;
     timestamp: number;
-};
+}
 
-export type GuildData = {
+export interface GuildData {
     roleMenus: Array<RoleMenuData>;
-};
+}
 
 export function isRoleMenuData(object: Object): object is RoleMenuData {
     return object.hasOwnProperty('guildId') && object.hasOwnProperty('channelId') && object.hasOwnProperty('messageId');

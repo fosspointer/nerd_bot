@@ -1,4 +1,4 @@
-import Discord, { ButtonInteraction, ActionRowBuilder, ComponentType, Interaction, MessageComponentType, RoleSelectMenuBuilder, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from 'discord.js'
+import Discord, { ButtonInteraction, ActionRowBuilder, ComponentType, Interaction, MessageComponentType, RoleSelectMenuBuilder, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder, InteractionContextType } from 'discord.js'
 import { Command } from '../command'
 import * as storage from '../storage'
 
@@ -9,19 +9,21 @@ const error = async (interaction: Discord.ChatInputCommandInteraction<Discord.Ca
 
 const RoleSelect : Command = {
     data: new Discord.SlashCommandBuilder()
+        .setContexts(InteractionContextType.Guild)
         .setName('role_select')
 		.setDescription('Add roles to a menu, for easily accessible, user-friendly role selection.'),
     async execute(interaction, client) {
-        if(!interaction.channel)
+        if(!interaction.channel || interaction.channel.type !== Discord.ChannelType.GuildText)
             return await error(interaction, 'Interaction channel cannot be null. Maybe try running the command again?');
         
         const id = Date.now();
+        const interaction_channel: Discord.TextChannel = interaction.channel;
 
         const first_row = new Discord.ActionRowBuilder<StringSelectMenuBuilder>();
         let title: string = '';
 
         await interaction.reply(`Mention all the roles to be added to the selection menu. Do not enter any extraneous text.`);
-        await interaction.channel!.awaitMessages({
+        await interaction_channel.awaitMessages({
             max: 1,
             time: 15000,
             errors: ['time']
@@ -50,7 +52,7 @@ const RoleSelect : Command = {
         }).catch(async () => {
             await error(interaction);
         }).finally(async () => {
-            await interaction.channel!.awaitMessages({
+            await interaction_channel.awaitMessages({
                 max: 1,
                 time: 15000,
                 errors: ['time']
@@ -75,18 +77,18 @@ const RoleSelect : Command = {
                     ]);
 
                 await first_row.components[0].setPlaceholder(title);
-                const select = await interaction.channel!.send({
+                const select = interaction_channel.send({
                     components: [first_row, second_row]
                 });
 
                 const role_menu_data: storage.RoleMenuData = {
-                    channelId: select.channelId,
-                    messageId: select.id,
+                    channelId: (await select).channelId,
+                    messageId: (await select).id,
                     timestamp: id
                 };
                 
-                await storage.addRoleMenu(select.guildId!, role_menu_data);
-                await storage.addCollector(select, id);
+                await storage.addRoleMenu((await select).guildId!, role_menu_data);
+                await storage.addCollector(await select, id);
             });
         });
     }
