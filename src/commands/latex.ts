@@ -56,7 +56,7 @@ const Latex : Command = {
         };
 
         const latex = interaction.options.getString('input', true);
-        const font_size = interaction.options.getNumber('font-size', false) || 48;
+        const font_size = interaction.options.getNumber('font-size', false) || 24;
         const svg = Buffer.from(latexToSvg(latex, font_size));
         const buffer = await sharp(svg).flatten({background: '#fff'}).png().toBuffer();
         const relative_filename = path.join('.', 'temp', `${randomIdentifier()}.${extension}`);
