@@ -20,13 +20,9 @@ const QuickLinc : Command = {
         const input = interaction.options.getString('code', true);
         const args = interaction.options.getString('args', false) || "";
         const pattern = /[^A-Za-z0-9\-+*/<>@_'"\s=]/gi;
-        console.log(input);
         
-        if(/system|sys_|read/gi.test(input))
+        if(/system|sys_|read|file/gi.test(input))
             return await interaction.reply('For security reasons, syscall/file/shell/read interactions are disabled in this session.');
-        
-        if(pattern.test(args))
-            return await interaction.reply('For security reasons, the only allowed argument characters are A-Za-z0-9+-*/<>@_');
         
         await interaction.deferReply();
         const relative_filename = path.join('.', 'temp', `${randomIdentifier()}.linc`);

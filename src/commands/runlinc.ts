@@ -23,12 +23,9 @@ const RunLinc : Command = {
         const response = await fetch(file.url);
         const input = await response.text();
 
-        if(/system|sys_|read/gi.test(input))
+        if(/system|sys_|read|file/gi.test(input))
             return await interaction.reply('For safety reasons, syscall/file/shell/read interactions are disabled in this session.');
-
-        if(pattern.test(args))
-            return await interaction.reply('For security reasons, the only allowed argument characters are A-Za-z0-9+-*/<>@_');
-
+        
         await interaction.deferReply();
         const relative_filename = path.join('.', 'temp', `${randomIdentifier()}.linc`);
         const filename = path.resolve(relative_filename);

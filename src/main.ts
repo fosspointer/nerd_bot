@@ -12,8 +12,6 @@ const client = new discord.Client({
         discord.IntentsBitField.Flags.Guilds,
         discord.IntentsBitField.Flags.GuildMessages, 
         discord.IntentsBitField.Flags.MessageContent, 
-        discord.IntentsBitField.Flags.GuildModeration,
-        discord.IntentsBitField.Flags.GuildMembers,
         discord.IntentsBitField.Flags.DirectMessages,
     ]
 });
