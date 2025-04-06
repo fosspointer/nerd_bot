@@ -1,7 +1,7 @@
 import path from 'path';
 import crypto from 'crypto';
 import { exec, execFile } from 'child_process';
-import { CacheType, ChatInputCommandInteraction } from 'discord.js';
+import { CacheType, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
 
 export function randomIdentifier(): string {
     return crypto.randomBytes(64).toString('base64url');
@@ -46,7 +46,7 @@ export async function runLinc(interaction: ChatInputCommandInteraction<CacheType
         const directory = path.dirname(filename);
         const base = path.basename(filename);
         const file = 'timeout';
-        let command = `5s firejail --net=none --private=${directory} --caps.drop=all --quiet --whitelist=${filename} lincenv -a`.split(' ');
+        let command = `5s firejail --seccomp --net=none --private=${directory} --caps.drop=all --quiet --whitelist=${filename} lincenv -a`.split(' ');
         const args = [
             ['CHANNEL_ID', interaction.channelId],
             ['USER_ID', interaction.user.id],
@@ -62,19 +62,24 @@ export async function runLinc(interaction: ChatInputCommandInteraction<CacheType
             stdout = await cleanOutput(stdout, filename);
             stderr = await cleanOutput(stderr, filename);
             const error_string = await cleanOutput(error?.toString() || "", filename);
-            if(error){
-                await interaction.editReply({content: `\`\`\`stderr\n${error_string}\`\`\``});
-                resolve();
-                return;
-            }
-        
-            if(stderr){
-                await interaction.editReply({content: `\`\`\`stderr\n${stderr}\`\`\``});
-                resolve();
-                return;
-            }
-        
-            await interaction.editReply({content: `\`\`\`stdout\n${stdout}\`\`\``});
+            let content: string;
+            let success = false;
+            const remove_first_line = (text: string) => {
+                const lines = text.split('\n');
+                return lines.length > 1? lines.slice(1).join('\n'): text;
+            };
+            if(error) content = remove_first_line(error_string);
+            else if(stderr) content = remove_first_line(stderr);
+            else { content = stdout; success = true; }
+            const footer = "Process exited with code " + (error?.code?.toString() ?? "0");
+
+            const output_embed = new EmbedBuilder()
+                .setColor(success? 0x00ff00: 0xff0000)
+                .setTitle(success? "Console output": "Error compiling!")
+                .setDescription(content || "No output")
+                .setFooter({text: footer});
+
+            await interaction.editReply({embeds: [output_embed]});
             resolve();
         });
     });

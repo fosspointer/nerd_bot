@@ -38,7 +38,6 @@ function variableIsString(variable: string | undefined): variable is string {
             console.log(`Started refreshing ${commands.length} application (/) commands.`);
        
             await rest.put(
-                // Routes.applicationGuildCommands(process.env.CLIENT_ID!, process.env.GUILD_ID!),
                 Routes.applicationCommands(process.env.CLIENT_ID!),
                 { body: commands },
             ).then(() => {

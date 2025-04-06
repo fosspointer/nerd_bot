@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder } from 'discord.js'
+import { SlashCommandBuilder, EmbedBuilder, InteractionContextType } from 'discord.js'
 import { Command } from '../command'
 
 const Ping : Command = {
@@ -9,7 +9,8 @@ const Ping : Command = {
             user.setName('user')
                 .setDescription('The user to display info about.')
                 .setRequired(true)
-            ),
+            )
+        .setContexts(InteractionContextType.BotDM),
     async execute(interaction, client) {
         const user = interaction.options.getUser('user', true);
         const date_options : Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: '2-digit' };
